@@ -8,4 +8,6 @@ target 'WIPReact' do
  pod 'TwitterCore'
  pod 'TwitterKit'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
 end
