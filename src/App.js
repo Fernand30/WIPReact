@@ -9,10 +9,12 @@ import {Router, Route, Schema, Animations, Scene,TabBar} from 'react-native-rout
 
 import Login from './screens/Login';
 import RegiserProfile from './screens/Profile';
+import Location from './screens/Profile/location';
 import Events from './screens/Events';
 import User from './screens/User';
 import ProfileSearch from './screens/ProfileSearch';
 import AddContact from './screens/AddContact';
+
 
 const Routes = () => (
 
@@ -24,6 +26,7 @@ const Routes = () => (
       <Scene key = "user" component = {User} hideNavBar={true} panHandlers={null} />
       <Scene key = "profilesearch" component = {ProfileSearch} hideNavBar={true} panHandlers={null} />
       <Scene key = "addcontact" component = {AddContact} hideNavBar={true} panHandlers={null}  />
+      <Scene key = "location" component = {Location} hideNavBar={true} panHandlers={null}  />
 
     </Scene>
  </Router>

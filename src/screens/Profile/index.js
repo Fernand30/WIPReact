@@ -18,7 +18,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { Switch } from 'react-native-switch';
 import SideMenu from 'react-native-side-menu';
 import Menu from '../User/Menu';
-
+import Axios from 'react-native-axios';
 import firebaseImage from 'firebase'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'react-native-fetch-blob'
@@ -27,7 +27,7 @@ import RNFetchBlob from 'react-native-fetch-blob'
 import {Colors, Fonts, Images, Metrics, Constants } from '../../theme';
 import Styles from './styles.js'
 
-
+global.fullAddress = 'Terrazas del avila, Caracas, Venezuela';
 const config = {
   apiKey: "AIzaSyB1iiLylcQdPCxsmFAX9yTzROJrMpBVwa4",
   authDomain: "wipreactnative",
@@ -70,8 +70,9 @@ const uploadImage = (uri, mime = 'application/octet-stream') => {
 export default class Profile extends Component {
 
   constructor(props){
-    //alert(JSON.stringify(global.user))
     super(props);
+
+    
     if(global.flag == 1){
       this.state = ({
         photoURL: global.user.profile_picture,
@@ -82,6 +83,7 @@ export default class Profile extends Component {
         phone: '',
         email: global.user.email,
         passwd: '',
+        confirmPW: '',
         setPublic: true,
         isOpen: false,
         selectedItem: '',
@@ -91,6 +93,8 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
+        passwd: '',
+        confirmPW: '',
       });
     }else if(global.flag == 3){
       this.state = ({
@@ -100,6 +104,8 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
+        passwd: '',
+        confirmPW: '',
       });
     }else if(global.flag == 4){
       this.state = ({
@@ -111,6 +117,7 @@ export default class Profile extends Component {
         phone: '',
         email: global.user.email,
         passwd: '',
+        confirmPW: '',
         setPublic: true,
         isOpen: false,
         selectedItem: '',
@@ -125,6 +132,7 @@ export default class Profile extends Component {
         phone: '',
         email: '',
         passwd: '',
+        confirmPW: '',
         setPublic: true,
         isOpen: false,
         selectedItem: '',
@@ -134,12 +142,16 @@ export default class Profile extends Component {
   }
 
   componentDidMount() {
-       
+    this.setState({location: 'Terrazas del avila, Caracas, Venezuela',});
   }
 
    goReady(){
-    if(global.flag ==1){
-        this.ref = firebase.firestore().collection('seegalbird@mail.com').doc('doc').set(
+      if(this.state.passwd != this.state.confirmPW){
+        alert('password is not confirm. please try again');
+        return;
+      }
+      
+      this.ref = firebase.firestore().collection(this.state.email).doc('doc').set(
                           {
                             photoURL: this.state.photoURL,
                             givenName: this.state.givenName,
@@ -151,29 +163,44 @@ export default class Profile extends Component {
                             passwd: this.state.passwd,
                             setPublic: this.state.setPublic,
                           }
-
                       );  
-    }else if(global.flag ==2){
 
-    }else if(global.flag ==3){
-      
-    }else if(global.flag ==4){
-      this.ref = firebase.firestore().collection(global.user.email).doc('doc').set(
-                          {
-                            photoURL: this.state.photoURL,
-                            givenName: this.state.givenName,
-                            familyName: this.state.familyName,
-                            birthday: this.state.birthday,
-                            gender: this.state.gender,
-                            phoneNumber: this.state.phoneNumber,
-                            email: this.state.email,
-                            passwd: this.state.passwd,
-                            setPublic: this.state.setPublic,
-                          }
+     var jsonPostData = JSON.stringify({
+                 field_55: this.state.setPublic,
+                 field_56: this.state.givenName,
+                 field_58: this.state.familyName,
+                 field_60: this.state.gender,
+                 field_62: this.state.birthday,
+                 field_63: this.state.phoneNumber,
+                 field_65: 'Venezuela',
+                 field_66: 'identify',
+                 field_68: this.state.email,
+                 field_69: this.state.photoURL,
+                 field_72: this.state.location,
+                 field_76: this.state.passwd,
+                 field_78: 'School',
+                 field_80: 'song',
+                 field_81: 'drink',
+                 field_83: 'sport',
+                 field_84: 'hobbies',
+                 field_100: 'token',
+          });
 
-                      );  
-    }
-      
+      fetch('https://api.caagcrm.com/api/sheets/8/items/', {  
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic YndwT1dURXRKQmxpQWJ2Z1VJSTI2RFJvZkR6NTNYOE9DWU5Ca0dLdVZDN3AyVGlrN0E6T3E0Vm02YUFoa08xMTBqVzZhYjh5TEZZQ1I1M0cxTk0wQ2RVOGFHTUhsQVl5UlpzbVg=',
+        },
+        body: jsonPostData,
+      }).then((response) => {
+                    if(response.status=="200"){
+                      console.log('success')
+                      //alert(JSON.stringify(response))
+                    }
+               }).catch(function(err) {
+                 
+        }).done();
       Actions.events();
    }
 
@@ -213,6 +240,12 @@ export default class Profile extends Component {
     this._pickImage();
   }
 
+  changeDate(date){
+      this.setState({
+        birthday: date,
+      })
+  }
+
   onMenuItemSelected = item =>
     this.setState({
       isOpen: false,
@@ -232,7 +265,14 @@ export default class Profile extends Component {
   }
 
   goLocation(){
-    alert('goMap')
+    Actions.location({that:this});
+  }
+
+  givenNameChange(text){
+    this.setState({givenName: text})
+  }
+  lastNameChange(text){
+    this.setState({familyName: text})
   }
 
   render() {
@@ -285,11 +325,11 @@ export default class Profile extends Component {
                    <View style={Styles.flexView}>
                       <View style={{flex:1, paddingLeft:20}}>
                           <Text style={Styles.leftText}> Name</Text>
-                          <TextInput onTextChange={(text)=>this.setState({givenName:text})} style={Styles.textInputStyle} value = {this.state.givenName}/>
+                          <TextInput onChangeText={(text) => this.givenNameChange(text)} style={Styles.textInputStyle} value = {this.state.givenName}/>
                       </View>  
                       <View style={{flex:1}}>
                           <Text style={Styles.leftText}> Last Name</Text>
-                          <TextInput onTextChange={(text)=>this.setState({familyName:text})} style={Styles.textInputStyle}  value = {this.state.familyName}/>
+                          <TextInput onChangeText={(text)=>this.lastNameChange(text)} style={Styles.textInputStyle}  value = {this.state.familyName}/>
                       </View>  
                    </View>  
                    <View style={Styles.flexView}>
@@ -325,7 +365,9 @@ export default class Profile extends Component {
                                 }
                                 // ... You can check the source to find the other keys.
                               }}
-                              onDateChange={(date) => {this.setState({birthday: date})}}
+                              onDateChange={(date) => {
+                                this.changeDate(date);
+                              }}
                             />
                       </View>  
                       <View style={{flex:1}}>
@@ -348,7 +390,7 @@ export default class Profile extends Component {
                    <View style={Styles.flexView}>
                       <View style={{flex:1, paddingLeft:20}}>
                           <Text style={Styles.leftText}> Phone:</Text>
-                          <TextInput onChangeText={(text)=>this.setState({phoneNumber: text})} style={Styles.textInputStyle} />
+                          <TextInput  keyboardType="number-pad" onChangeText={(text)=>this.setState({phoneNumber: text})} style={Styles.textInputStyle} returnKeyType='done'/>
                       </View>  
                       <View style={{flex:1}}>
                           <Text style={Styles.leftText}> Email</Text>
@@ -362,14 +404,14 @@ export default class Profile extends Component {
                                            </View>  
                                            <View style={{flex:1}}>
                                                <Text style={Styles.leftText}> Confirm Password</Text>
-                                               <TextInput onChangeText={(text)=>this.setState({confirmText: text})} style={Styles.textInputStyle}  secureTextEntry={true}/>
+                                               <TextInput onChangeText={(text)=>this.setState({confirmPW: text})} style={Styles.textInputStyle}  secureTextEntry={true}/>
                                            </View>  
                                         </View>
                                       :null }  
                    <View style={{marginTop:20}}>
                      <Text style={[{marginLeft:20},Styles.leftText]}> Location</Text>
                      <TouchableOpacity onPress={this.goLocation.bind(this)}>
-                        <Text style={[{marginLeft:20,marginTop:10},Styles.leftText]}> Terrazas del avila, Caracas, Venezuela &gt;</Text>
+                        <Text style={[{marginLeft:20,marginTop:10},Styles.leftText]}> {this.state.location} &gt;</Text>
                      </TouchableOpacity>  
                    </View>  
                    <View style={Styles.flexView}>

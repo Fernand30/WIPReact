@@ -34,6 +34,17 @@ export default {
     alignItems:'center'
   },
 
+  backButton:{
+      marginTop:20,
+      marginLeft:20,
+      width:40,
+      height:30,
+      borderRadius:10,
+      paddingLeft:5,
+      justifyContent:'center',
+      backgroundColor:'#e06666',
+  },
+
   menuView: {
     marginTop: 30,
     flexDirection:'row',
