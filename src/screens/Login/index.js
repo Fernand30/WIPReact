@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
-import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
-var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
+import GoogleSignIn from 'react-native-google-sign-in';
+//var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
 import InstagramLogin from 'react-native-instagram-login'
 import TwitterButton from './TwitterButton';
 import {Colors, Fonts, Images, Metrics, Constants } from '../../theme';
@@ -34,15 +34,6 @@ export default class Login extends Component {
                         },
                       twitter: null,
                       });
-        GoogleSignin.configure({
-          iosClientId: '375541008713-k4sj7j5f5d2qh2teuir5bj023oauo64p.apps.googleusercontent.com', // only for iOS
-        })
-        .then(() => {
-          // you can now call currentUserAsync()
-        });
-        this.state=({
-          user: '',
-        })
       }
 
   componentDidMount(){
@@ -55,7 +46,6 @@ export default class Login extends Component {
   }
 
   goInstagram(token){
-
     fetch('https://api.instagram.com/v1/users/self/?access_token='+token+'')
       .then((response) => response.json())
       .then((responseJson) => {
@@ -64,8 +54,10 @@ export default class Login extends Component {
         this.dataInsertToFirebase(responseJson.data)
       })
       .catch((error) => {
-        console.error(error);
+        alert(error);
+        return;
       });
+      
   }
 
   goGoogleLogOut(){
@@ -79,14 +71,14 @@ export default class Login extends Component {
   }
 
   goFacebook(){ 
-      FBLoginManager.loginWithPermissions(["email","user_friends"], function(error, data){
-      if (!error) {
-        alert('success');
-        global.flag = 2;
-      } else {
-        console.log(error);
-      }
-    })
+    //   FBLoginManager.loginWithPermissions(["email","user_friends"], function(error, data){
+    //   if (!error) {
+    //     alert('success');
+    //     global.flag = 2;
+    //   } else {
+    //     console.log(error);
+    //   }
+    // })
   }
 
   goTwitter(){
@@ -101,38 +93,53 @@ export default class Login extends Component {
               });
   }
 
-  goGoogle(){
-
-      GoogleSignin.signIn() 
-          .then((user) => {
-            global.user = user;
+  async goGoogle(){
+          await GoogleSignIn.configure({
+            clientID: '894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a.apps.googleusercontent.com',
+            scopes: ['openid', 'email', 'profile'],
+            shouldFetchBasicProfile: true,
+          });
+          const user = await GoogleSignIn.signInPromise();   
+          setTimeout(() => {
             global.flag = 4;
+            global.user = user;
             this.dataInsertToFirebase(user)
-            
-          })
-          .catch((err) => {
-            alert(JSON.stringify(err));
-          })
-          .done();
+          }, 500);
   }
 
   dataInsertToFirebase(user){
+    
         if(global.flag == 1){
-           firebase.auth().createUserWithEmailAndPassword('seegalbird@mail.com', 'password').then(()=>{
-                    Actions.registerprofile();
-                }).catch(function(error) {
-                    Actions.registerprofile();
-                });
+           Actions.registerprofile();
         }else if(global.flag == 2){
 
         }else if(global.flag == 3){
           
         }else if(global.flag == 4){
-          firebase.auth().createUserWithEmailAndPassword(user.email, 'password').then(()=>{
+                firebase.auth().createUserWithEmailAndPassword(user.email, 'password').then((data)=>{
+                      global.uid = data.uid;
+                      
+                      const crd = firebase.auth.GoogleAuthProvider.credential(
+                          user.idToken,
+                          user.accessToken,
+                      );
+                    global.fireToken = crd.token;
                     Actions.registerprofile();
                 }).catch(function(error) {
-                    Actions.registerprofile();
+                      firebase.auth().signInWithEmailAndPassword(user.email, 'password').then((data)=>{
+                          global.uid = data.uid;
+                          
+                          const crd = firebase.auth.GoogleAuthProvider.credential(
+                              user.idToken,
+                              user.accessToken,
+                          );
+                          global.fireToken = crd.token;
+                          Actions.registerprofile();
+                      }).catch(function(error){
+                          alert(error)
+                      });
                 });
+                
         }
     }
   handleTokens(tokens) {
@@ -162,7 +169,7 @@ export default class Login extends Component {
                                     ref='ins'
                                     clientId='f630e777d2e1494aa7094892dc90d90c'
                                     redirectUrl='https://www.google.com/'
-                                    scopes={['public_content+follower_list']}
+                                    scopes={["basic","comments","follower_list","likes","public_content","relationships"]}
                                     onLoginSuccess={(token) => this.goInstagram(token)}
                                   />
                             </View> 

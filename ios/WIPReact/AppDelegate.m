@@ -8,17 +8,20 @@
  */
 
 #import "AppDelegate.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
+@import Firebase;
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
 #import <TwitterKit/TwitterKit.h>
-#import <Firebase.h>
-@implementation AppDelegate
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 
+@implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  NSError* configureError;
+  [[GGLContext sharedInstance] configureWithError: &configureError];
+  NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+  
   NSURL *jsCodeLocation;
   [FIRApp configure];
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
@@ -38,30 +41,36 @@
                            didFinishLaunchingWithOptions:launchOptions];
   return YES;
 }
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-  
-  return [RNGoogleSignin application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  BOOL handled;
-  if([url.absoluteString containsString:@"facebook.com"]){
-      handled = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                                    openURL:url
-                                                          sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                                                 annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                      ];
-  }else{
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+   BOOL handled;
+  handled = [[Twitter sharedInstance] application:application openURL:url options:options];
+    if([url.absoluteString containsString:@"google"]){
+    handled = [[GIDSignIn sharedInstance] handleURL:url
+                                  sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                         annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    }else if([url.absoluteString containsString:@"twitter"]){
       handled = [[Twitter sharedInstance] application:application openURL:url options:options];
-  }
+    }else{
+      handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                               openURL:url
+                                                     sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                            annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+                 ];
+    }
   return handled;
 }
-  - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBSDKAppEvents activateApp];
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+  if ([[GIDSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation]) {
+    return YES;
   }
+  return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [FBSDKAppEvents activateApp];
+}
   
 @end

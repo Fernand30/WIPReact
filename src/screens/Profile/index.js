@@ -10,12 +10,13 @@ import {
   TextInput,
   Picker,
   Platform,
+  Switch,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown';
-import { Switch } from 'react-native-switch';
+
 import SideMenu from 'react-native-side-menu';
 import Menu from '../User/Menu';
 import Axios from 'react-native-axios';
@@ -70,9 +71,7 @@ const uploadImage = (uri, mime = 'application/octet-stream') => {
 export default class Profile extends Component {
 
   constructor(props){
-    super(props);
-
-    
+    super(props);    
     if(global.flag == 1){
       this.state = ({
         photoURL: global.user.profile_picture,
@@ -87,6 +86,7 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
+        token: global.fireToken,
       });
     }else if(global.flag == 2){
       this.state = ({ 
@@ -95,6 +95,7 @@ export default class Profile extends Component {
         selectedItem: '',
         passwd: '',
         confirmPW: '',
+        token: global.fireToken,
       });
     }else if(global.flag == 3){
       this.state = ({
@@ -106,13 +107,14 @@ export default class Profile extends Component {
         selectedItem: '',
         passwd: '',
         confirmPW: '',
+        token: global.fireToken,
       });
     }else if(global.flag == 4){
       this.state = ({
-        photoURL: global.user.photo,
+        photoURL: global.user.photoUrl320,
         givenName: global.user.givenName,
         familyName: global.user.familyName,
-        birthday: global.user.birthday,
+        birthday: '',
         gender: 'Male',
         phone: '',
         email: global.user.email,
@@ -121,6 +123,7 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
+        token: global.fireToken,
       });
     }else if(global.flag == 5){
       this.state = ({
@@ -136,6 +139,7 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
+        token: global.fireToken,
       });
     }
     
@@ -143,28 +147,15 @@ export default class Profile extends Component {
 
   componentDidMount() {
     this.setState({location: 'Terrazas del avila, Caracas, Venezuela',});
+    this.getData();
   }
 
    goReady(){
+      var id = ''
       if(this.state.passwd != this.state.confirmPW){
         alert('password is not confirm. please try again');
         return;
-      }
-      
-      this.ref = firebase.firestore().collection(this.state.email).doc('doc').set(
-                          {
-                            photoURL: this.state.photoURL,
-                            givenName: this.state.givenName,
-                            familyName: this.state.familyName,
-                            birthday: this.state.birthday,
-                            gender: this.state.gender,
-                            phoneNumber: this.state.phoneNumber,
-                            email: this.state.email,
-                            passwd: this.state.passwd,
-                            setPublic: this.state.setPublic,
-                          }
-                      );  
-
+      }   
      var jsonPostData = JSON.stringify({
                  field_55: this.state.setPublic,
                  field_56: this.state.givenName,
@@ -183,9 +174,8 @@ export default class Profile extends Component {
                  field_81: 'drink',
                  field_83: 'sport',
                  field_84: 'hobbies',
-                 field_100: 'token',
+                 field_100: global.fireToken,
           });
-
       fetch('https://api.caagcrm.com/api/sheets/8/items/', {  
         method: 'POST',
         headers: {
@@ -196,23 +186,52 @@ export default class Profile extends Component {
       }).then((response) => {
                     if(response.status=="200"){
                       console.log('success')
-                      //alert(JSON.stringify(response))
+                      id = JSON.parse(response._bodyInit).sheet_item.id 
+                      this.ref = firebase.firestore().collection(global.uid).doc('doc').set(
+                          {
+                            photoURL: this.state.photoURL,
+                            givenName: this.state.givenName,
+                            familyName: this.state.familyName,
+                            birthday: this.state.birthday,
+                            gender: this.state.gender,
+                            phoneNumber: this.state.phoneNumber,
+                            email: this.state.email,
+                            passwd: this.state.passwd,
+                            setPublic: this.state.setPublic,
+                            token: this.state.token,
+                            id: id,
+                          }
+                      );  
+                      Actions.events();       
                     }
                }).catch(function(err) {
-                 
-        }).done();
-      Actions.events();
+                alert(err)
+        }).done();        
    }
 
    getData(){
-      this.ref = firebase.firestore().collection(global.user.email)
+      this.ref = firebase.firestore().collection(global.uid)
        .doc('doc')
        .get()
        .then((documentSnapshot) => {
-           const value = documentSnapshot.data();           
-            global.photoURL = value['photoURL'];
-            //global.displayName = value['displayName'] ;
-            global.email = value['email'] ;         
+           const value = documentSnapshot.data();    
+           if(value){
+                this.setState({
+                  photoURL: value['photoURL'];,
+                  givenName: value['givenName'];,
+                  familyName: value['familyName'];,
+                  birthday: value['birthday'];,
+                  gender: value['gender'];,
+                  phone: value['phone'];,
+                  email: value['email'];,
+                  passwd: '',
+                  confirmPW: '',
+                  setPublic: value['setPublic'];,
+                  isOpen: false,
+                  selectedItem: '',
+                  token: value['token'];,
+                })      
+           }            
        });
    }
 
@@ -274,6 +293,11 @@ export default class Profile extends Component {
   lastNameChange(text){
     this.setState({familyName: text})
   }
+  changePublic(val){
+    this.setState({
+      setPublic: val,
+    })
+  }
 
   render() {
     that = this;
@@ -309,8 +333,8 @@ export default class Profile extends Component {
                       <Text style={Styles.commonText}> Public Profile ? </Text>
                       <View style={{flex:1,alignItems:'center'}}>
                           <Switch
-                            value={true}
-                            onValueChange={(val) => this.setState({setPublic: val})}
+                            value={this.state.setPublic}
+                            onValueChange={(val) => this.changePublic(val)}
                             disabled={false}
                             activeText={''}
                             inActiveText={''}
@@ -341,8 +365,8 @@ export default class Profile extends Component {
                               mode="date"
                               placeholder="select date"
                               format="YYYY-MM-DD"
-                              minDate="2016-05-01"
-                              maxDate="2016-06-01"
+                              minDate="1900-01-01"
+                              maxDate="2200-01-01"
                               confirmBtnText="Confirm"
                               cancelBtnText="Cancel"
                               customStyles={{

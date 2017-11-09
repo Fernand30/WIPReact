@@ -14,7 +14,6 @@ import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown';
-import { Switch } from 'react-native-switch';
 import SideMenu from 'react-native-side-menu';
 import Menu from './Menu';
 

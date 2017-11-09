@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>WIPReact</string>
+	<string>WIP</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.375541008713-k4sj7j5f5d2qh2teuir5bj023oauo64p</string>
+			<string>com.googleusercontent.apps.894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.375541008713-k4sj7j5f5d2qh2teuir5bj023oauo64p</string>
+				<string>com.googleusercontent.apps.894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a</string>
 			</array>
 		</dict>
 		<dict>
@@ -46,20 +46,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>fb351881141948781</string>
+			<string>twitterkit-TTDfr3eeAzBTJ0Ca7LHf84Whw</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb351881141948781</string>
+				<string>twitterkit-TTDfr3eeAzBTJ0Ca7LHf84Whw</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>twitterkit-TTDfr3eeAzBTJ0Ca7LHf84Whw</string>
+			<string>fb351881141948781</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>twitterkit-TTDfr3eeAzBTJ0Ca7LHf84Whw</string>
+				<string>fb351881141948781</string>
 			</array>
 		</dict>
 	</array>
@@ -68,15 +68,15 @@
 	<key>FacebookAppID</key>
 	<string>351881141948781</string>
 	<key>FacebookDisplayName</key>
-	<string>WIP</string>
+	<string>WIPReact</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>twitter</string>
+		<string>twitterauth</string>
 		<string>fbapi</string>
 		<string>fb-messenger-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
-		<string>twitter</string>
-		<string>twitterauth</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -92,7 +92,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library Access Warning</string>
 	<key>UIAppFonts</key>
