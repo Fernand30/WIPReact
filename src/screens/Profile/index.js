@@ -11,15 +11,15 @@ import {
   Picker,
   Platform,
   Switch,
+  ScrollView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import SideMenu from 'react-native-side-menu';
 import Menu from '../User/Menu';
-import Axios from 'react-native-axios';
 import firebaseImage from 'firebase'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'react-native-fetch-blob'
@@ -77,16 +77,16 @@ export default class Profile extends Component {
         photoURL: global.user.profile_picture,
         givenName: global.user.full_name,
         familyName: '',
-        birthday: global.user.birthday,
+        birthday: '',
         gender: 'Male',
         phone: '',
-        email: global.user.email,
+        email: '',
         passwd: '',
         confirmPW: '',
         setPublic: true,
         isOpen: false,
         selectedItem: '',
-        token: global.fireToken,
+        token: '',
       });
     }else if(global.flag == 2){
       this.state = ({ 
@@ -95,7 +95,7 @@ export default class Profile extends Component {
         selectedItem: '',
         passwd: '',
         confirmPW: '',
-        token: global.fireToken,
+        token: '',
       });
     }else if(global.flag == 3){
       this.state = ({
@@ -107,12 +107,12 @@ export default class Profile extends Component {
         selectedItem: '',
         passwd: '',
         confirmPW: '',
-        token: global.fireToken,
+        token: '',
       });
     }else if(global.flag == 4){
       this.state = ({
         photoURL: global.user.photoUrl320,
-        givenName: global.user.givenName,
+        givenName: global.user.givenName+' '+global.user.familyName,
         familyName: global.user.familyName,
         birthday: '',
         gender: 'Male',
@@ -139,7 +139,7 @@ export default class Profile extends Component {
         setPublic: true,
         isOpen: false,
         selectedItem: '',
-        token: global.fireToken,
+        token: '',
       });
     }
     
@@ -147,16 +147,49 @@ export default class Profile extends Component {
 
   componentDidMount() {
     this.setState({location: 'Terrazas del avila, Caracas, Venezuela',});
-    this.getData();
+    if(global.flag == 4){
+      this.getData();
+    }    
   }
 
    goReady(){
-      var id = ''
-      if(this.state.passwd != this.state.confirmPW){
+      
+      if((this.state.passwd != this.state.confirmPW) || (this.state.email=='')){
         alert('password is not confirm. please try again');
         return;
       }   
-     var jsonPostData = JSON.stringify({
+
+      if((global.flag == 1)||(global.flag ==2 )||(global.flag == 3)||(global.flag == 5)){
+                 firebase.auth().createUserWithEmailAndPassword(this.state.email, 'password').then((data)=>{
+                      global.uid = data.uid;
+                      const crd = firebase.auth.EmailAuthProvider.credential(
+                          this.state.email,
+                          'password'
+                      );
+                      global.fireToken = crd['token'];
+                      this.callApi()
+                }).catch(function(error){
+                      firebase.auth().signInWithEmailAndPassword(this.state.email, 'password').then((data)=>{
+                          global.uid = data.uid;
+                          const crd = firebase.auth.EmailAuthProvider.credential(
+                              this.state.email,
+                              'password'
+                          );
+                          global.fireToken = crd['token'];
+                          this.callApi()
+                      }).catch(function(error){
+                          alert(error)
+                      });
+                }); 
+      }else{
+        this.callApi()
+      }         
+   }
+
+   callApi(){
+
+    var id = ''
+    var jsonPostData = JSON.stringify({
                  field_55: this.state.setPublic,
                  field_56: this.state.givenName,
                  field_58: this.state.familyName,
@@ -176,7 +209,8 @@ export default class Profile extends Component {
                  field_84: 'hobbies',
                  field_100: global.fireToken,
           });
-      fetch('https://api.caagcrm.com/api/sheets/8/items/', {  
+
+    fetch('https://api.caagcrm.com/api/sheets/8/items/', {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -184,8 +218,7 @@ export default class Profile extends Component {
         },
         body: jsonPostData,
       }).then((response) => {
-                    if(response.status=="200"){
-                      console.log('success')
+                    if(response.status=="200"){     
                       id = JSON.parse(response._bodyInit).sheet_item.id 
                       this.ref = firebase.firestore().collection(global.uid).doc('doc').set(
                           {
@@ -217,19 +250,19 @@ export default class Profile extends Component {
            const value = documentSnapshot.data();    
            if(value){
                 this.setState({
-                  photoURL: value['photoURL'];,
-                  givenName: value['givenName'];,
-                  familyName: value['familyName'];,
-                  birthday: value['birthday'];,
-                  gender: value['gender'];,
-                  phone: value['phone'];,
-                  email: value['email'];,
+                  photoURL: value['photoURL'],
+                  givenName: value['givenName'],
+                  familyName: value['familyName'],
+                  birthday: value['birthday'],
+                  gender: value['gender'],
+                  phone: value['phone'],
+                  email: value['email'],
                   passwd: '',
                   confirmPW: '',
-                  setPublic: value['setPublic'];,
+                  setPublic: value['setPublic'],
                   isOpen: false,
                   selectedItem: '',
-                  token: value['token'];,
+                  token: value['token'],
                 })      
            }            
        });
@@ -309,28 +342,33 @@ export default class Profile extends Component {
         onChange={isOpen => this.updateMenuState(isOpen)}
       >
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
-                   <View style={{height:20,}}/>
-                   <View style={Styles.menuView}>
-                      <TouchableOpacity onPress={this.toggle.bind(this)} style={{flex:1,marginTop:20,}}>
-                          <Image source = {Images.menu} style = {Styles.menuImage}/>
-                      </TouchableOpacity> 
-                      <View style={{flex:1,borderBottomColor:'white',borderBottomWidth:1,marginLeft:40,marginRight:40}}>  
-                          <Text style={Styles.registryText}> Registery</Text>
+            
+                   <View style={Styles.statusBar}/>
+                   <KeyboardAwareScrollView>  
+                   <View  style={Styles.menuView}>
+                      <View style={{flex: 1}}/>
+                      <View style={{borderBottomColor:'white',borderBottomWidth:1,paddingLeft:5,paddingRight:5,paddingBottom:5,}}>  
+                          <Text style={Styles.registryText}>Register</Text>
                       </View>    
                       <View style={{flex:1}} />
-                   </View>   
-                   <View style={Styles.flexView}>
-                      <Text style={Styles.commonText}> Profile Photo </Text>
+                   </View> 
+
+                   <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginTop:20,}}>
+                     
+                          <Text style={Styles.commonText}> Profile Photo </Text>
+                     
                       <View style={{flex:1,alignItems:'center'}}>
                           <TouchableOpacity onPress={this.upadtePicture.bind(this)}>
                               {(this.state.photoURL!='')?<Image source={{uri:this.state.photoURL}} style={Styles.photoView}/>
-                                               :<Image source={Images.account} style={Styles.photoView}/>    }
+                                               :<Image source={Images.account} style={Styles.photoView}/> }
                           </TouchableOpacity>                 
                       </View>    
                       <View style={{flex:1}}/>
                    </View>   
-                   <View style={Styles.flexView}>
-                      <Text style={Styles.commonText}> Public Profile ? </Text>
+                   <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginTop:20,}}>
+                      
+                          <Text style={Styles.commonText}> Public Profile ? </Text>
+                     
                       <View style={{flex:1,alignItems:'center'}}>
                           <Switch
                             value={this.state.setPublic}
@@ -346,21 +384,18 @@ export default class Profile extends Component {
                       </View> 
                       <View style={{flex:1}}/>  
                    </View>   
-                   <View style={Styles.flexView}>
-                      <View style={{flex:1, paddingLeft:20}}>
+                   
+                      <View style={Styles.eachView}>
                           <Text style={Styles.leftText}> Name</Text>
                           <TextInput onChangeText={(text) => this.givenNameChange(text)} style={Styles.textInputStyle} value = {this.state.givenName}/>
                       </View>  
-                      <View style={{flex:1}}>
-                          <Text style={Styles.leftText}> Last Name</Text>
-                          <TextInput onChangeText={(text)=>this.lastNameChange(text)} style={Styles.textInputStyle}  value = {this.state.familyName}/>
-                      </View>  
-                   </View>  
-                   <View style={Styles.flexView}>
-                      <View style={{flex:1, marginTop:10,paddingLeft:20}}>
+                  
+                
+                  
+                       <View style={Styles.eachView}>
                           <Text style={Styles.leftText}> Date of Birth</Text>
                           <DatePicker
-                              style={{marginTop:10}}
+                              style={{marginTop:0}}
                               date={this.state.birthday}
                               mode="date"
                               placeholder="select date"
@@ -393,13 +428,14 @@ export default class Profile extends Component {
                                 this.changeDate(date);
                               }}
                             />
-                      </View>  
-                      <View style={{flex:1}}>
+                      </View> 
+                  
+                       <View style={Styles.eachView}>
                           <Text style={Styles.leftText}> Gender</Text>
                           <ModalDropdown options={['Male', 'Female']}
                             style={{marginTop:10,width:140,backgroundColor:'#64a17e',height:30,borderRadius:15}}
                             textStyle ={{backgroundColor:'transparent',color:'white',textAlign:'center',marginTop:10}}
-                            dropdownStyle={{width:120,height:60,backgroundColor:'#64a17e',marginRight:10,marginTop:5,borderWidth:0}}
+                            dropdownStyle={{width:120,height:60,backgroundColor:'#64a17e',marginLeft:10,marginTop:5,borderWidth:0}}
                             dropdownTextStyle={{backgroundColor:'#64a17e',color:'white'}}
                             onSelect={(idx, value) => this.selectGender(idx, value)}
                             
@@ -410,40 +446,40 @@ export default class Profile extends Component {
                             </View>  
                           </ModalDropdown>
                       </View>  
-                   </View>   
-                   <View style={Styles.flexView}>
-                      <View style={{flex:1, paddingLeft:20}}>
-                          <Text style={Styles.leftText}> Phone:</Text>
+                   
+                   
+                      <View style={Styles.eachView}>
+                          <Text style={Styles.leftText}> Phone</Text>
                           <TextInput  keyboardType="number-pad" onChangeText={(text)=>this.setState({phoneNumber: text})} style={Styles.textInputStyle} returnKeyType='done'/>
                       </View>  
-                      <View style={{flex:1}}>
+                       <View style={Styles.eachView}>
                           <Text style={Styles.leftText}> Email</Text>
                           <TextInput onChangeText={(text)=>this.setState({email: text})} style={Styles.textInputStyle} value={this.state.email}/>
                       </View>  
-                   </View>   
-                   {(global.flag==5)?<View style={Styles.flexView}>
-                                           <View style={{flex:1, paddingLeft:20}}>
+                   
+                   {(global.flag==5)?  <View>
+                                            <View style={Styles.eachView}>
                                                <Text style={Styles.leftText}> Password</Text>
                                                <TextInput onChangeText={(text)=>this.setState({passwd: text})} style={Styles.textInputStyle} secureTextEntry={true}/>
                                            </View>  
-                                           <View style={{flex:1}}>
+                                            <View style={Styles.eachView}>
                                                <Text style={Styles.leftText}> Confirm Password</Text>
                                                <TextInput onChangeText={(text)=>this.setState({confirmPW: text})} style={Styles.textInputStyle}  secureTextEntry={true}/>
                                            </View>  
                                         </View>
                                       :null }  
                    <View style={{marginTop:20}}>
-                     <Text style={[{marginLeft:20},Styles.leftText]}> Location</Text>
+                     <Text style={[{marginLeft:10},Styles.leftText]}> Location</Text>
                      <TouchableOpacity onPress={this.goLocation.bind(this)}>
-                        <Text style={[{marginLeft:20,marginTop:10},Styles.leftText]}> {this.state.location} &gt;</Text>
+                        <Text style={{marginLeft:10,marginTop:10,backgroundColor:'transparent',color:'white'}}> {this.state.location} &gt;</Text>
                      </TouchableOpacity>  
                    </View>  
-                   <View style={Styles.flexView}>
-                      <View />  
+                   <View style={{alignItems:'center',marginTop:10}}>
                       <TouchableOpacity onPress = {this.goReady.bind(this)} style={Styles.readyButton}>
-                          <Text style={{color:'white'}}> Ready&gt;</Text>
+                          <Text style={{color:'white'}}> Ready</Text>
                       </TouchableOpacity>
-                   </View>       
+                   </View>   
+                   </KeyboardAwareScrollView>       
             </ImageBackground>
         </SideMenu>    
     );

@@ -19,7 +19,7 @@ const metrics = {
   listItemWidth: sWidth - (dMargin * 2),
   thumbRadius: 10,
   sliderMarkerSize: sWidth / 20,
-
+  modalWidth: sWidth/2-15,
   buttonWidth: sWidth * 0.8,
   buttonHeight: sHeight / 15,
   logoSize: sWidth / 3,

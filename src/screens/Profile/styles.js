@@ -1,7 +1,9 @@
 const React = require("react-native");
 const { Dimensions, Platform } = React;
 const commonColor = require("../../theme/variables/commonColor");
-
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
+const viewSpace = responsiveHeight(2);
+const statusBar = responsiveHeight(3);
 const deviceHeight = Dimensions.get("window").height;
 
 export default {
@@ -16,14 +18,15 @@ export default {
   },
 
   flexView: {
-    marginTop:20,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between'
+    marginTop:viewSpace,
+  },
+
+  statusBar: {
+      height:statusBar,
   },
 
   bottomflexView: {
-    marginTop:10,
+    marginTop:viewSpace,
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between'
@@ -35,7 +38,7 @@ export default {
   },
 
   backButton:{
-      marginTop:20,
+      marginTop:responsiveHeight(5),
       marginLeft:20,
       width:40,
       height:30,
@@ -52,42 +55,22 @@ export default {
   },
 
   menuImage: {
-    marginLeft:10,
+    marginLeft:responsiveHeight(5),
     width:30,
     height: 20,
     resizeMode: 'stretch'
   },
 
-  welcomText :{
-    marginTop:20,
-    textAlign:'center',
-    fontSize:16,
-    color:'white',
-    backgroundColor:'transparent',
-  },
-
-  socialButtonView:{
-    paddingTop:40,
-    paddingLeft:90,
-    paddingRight:90,
-  },
-
-  socialIcon:{
-    width:70,
-    height:70,
-    resizeMode:'cover',
-  },
-
   commonText:{
     backgroundColor:'transparent',
-    textAlign:'center',
+    marginLeft:10,
     color:'white',
-    marginLeft:20,
   },
 
   leftText:{
     backgroundColor:'transparent',
     color:'white',
+    width: 130,
   },
 
   buttonText:{
@@ -114,13 +97,14 @@ export default {
   registryText:{
     textAlign:'center',
     color:'white',
-    fontSize:20,
+    fontSize: responsiveFontSize(3),
     backgroundColor:'transparent'
   },
 
   readyButton: {marginRight:10,width:100,height:40,borderRadius:10,backgroundColor:'green',alignItems:'center',justifyContent:'center'},
 
-  photoView: {width:60,height:60,borderRadius:30,resizeMode:'cover',marginLeft:30},
+  photoView: {width:60,height:60,borderRadius:30,resizeMode:'cover',},
 
-  textInputStyle: {paddingLeft:10,marginTop:10,backgroundColor:'#64a17e', width:140,height:30,borderRadius:15},
+  textInputStyle: {paddingLeft:10,backgroundColor:'#64a17e', width:140,height:30,borderRadius:15},
+  eachView: {flexDirection:'row', marginTop:20,paddingLeft:10,alignItems:'center'},
 };

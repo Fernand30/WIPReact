@@ -1,6 +1,7 @@
 const images = {
     bg : require('../Assets/Images/bg.png'),
     logo : require('../Assets/Images/logo.png'),
+    headerlogo : require('../Assets/Images/headerlogo.png'),
     facebookIcon : require('../Assets/Images/facebookIcon.png'),
     googleIcon : require('../Assets/Images/googleIcon.png'),
     instagramIcon : require('../Assets/Images/instagramIcon.png'),

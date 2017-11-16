@@ -33,7 +33,7 @@ export default class App extends Component<{}> {
 
   async googleSignin(){
       await GoogleSignIn.configure({
-            clientID: '375541008713-k4sj7j5f5d2qh2teuir5bj023oauo64p.apps.googleusercontent.com',
+            clientID: '894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a.apps.googleusercontent.com',
             scopes: ['openid', 'email', 'profile'],
             shouldFetchBasicProfile: true,
           });
@@ -118,20 +118,3 @@ const styles = StyleSheet.create({
   },
 });
 
-/*<FBLogin /> 
-        <TouchableOpacity onPress = {this._twitterSignIn.bind(this)}>
-              <Text> Twitter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.refs.ins.show()}>
-              <Text> instagarm</Text>
-        </TouchableOpacity>    
-        
-        <InstagramLogin
-          ref='ins'
-          clientId='f630e777d2e1494aa7094892dc90d90c'
-          redirectUrl='https://www.google.com/'
-          scopes={['public_content+follower_list']}
-          onLoginSuccess={(token) => this.goInstagram(token)}
-        />  
-
-        */

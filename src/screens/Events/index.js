@@ -16,6 +16,7 @@ import firebase from 'react-native-firebase';
 import ModalDropdown from 'react-native-modal-dropdown';
 import MapView from 'react-native-maps';
 import SideMenu from 'react-native-side-menu';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Menu from '../User/Menu';
 
 import {Colors, Fonts, Images, Metrics, Constants } from '../../theme';
@@ -110,12 +111,13 @@ export default class Profile extends Component {
       >
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
                    <View style={{height:20,}}/>
+                   <KeyboardAwareScrollView>
                    <View style={Styles.menuView}>
                       <TouchableOpacity onPress={this.toggle.bind(this)} style={{flex:1,marginTop:20,}}>
                           <Image source = {Images.menu} style = {Styles.menuImage}/>
                       </TouchableOpacity> 
-                      <View style={{flex:1,borderBottomColor:'white',borderBottomWidth:1,marginLeft:50,marginRight:50}}>  
-                          <Text style={Styles.registryText}> Events</Text>
+                      <View style={{borderBottomColor:'white',borderBottomWidth:1,paddingLeft:5,paddingRight:5,paddingBottom:5,}}>   
+                          <Text style={Styles.registryText}>Events</Text>
                       </View>    
                       <View style={{flex:1}} />
                    </View>   
@@ -124,9 +126,9 @@ export default class Profile extends Component {
                           <Text style={{color:'white'}}> Search WIP</Text>
                       </TouchableOpacity>
                       <ModalDropdown options={['Public', 'Private']}
-                            style={{marginTop:10,width:140,backgroundColor:'#64a17e',height:30,borderRadius:15}}
+                            style={{marginTop:10,width:120,backgroundColor:'#64a17e',height:30,borderRadius:15}}
                             textStyle ={{backgroundColor:'transparent',color:'white',textAlign:'center',marginTop:10}}
-                            dropdownStyle={{width:120,height:60,backgroundColor:'#64a17e',marginRight:10,marginTop:5,borderWidth:0}}
+                            dropdownStyle={{width:100,height:60,backgroundColor:'#64a17e',marginRight:10,marginTop:5,borderWidth:0}}
                             dropdownTextStyle={{backgroundColor:'#64a17e',color:'white'}}
                             onSelect={(idx, value) => this.selectPublic(idx, value)}
                             
@@ -140,9 +142,9 @@ export default class Profile extends Component {
                    <View style={Styles.flexView}>
                       <Text style={Styles.commonText}>Cost of Entry: </Text>
                        <ModalDropdown options={['$', '£','€']}
-                            style={{marginTop:10,width:70,backgroundColor:'#64a17e',height:30,borderRadius:15}}
+                            style={{marginTop:10,width:60,backgroundColor:'#64a17e',height:30,borderRadius:15}}
                             textStyle ={{backgroundColor:'transparent',color:'white',textAlign:'center',marginTop:10}}
-                            dropdownStyle={{width:40,height:90,backgroundColor:'#64a17e',marginLeft:15,marginTop:5,borderWidth:0}}
+                            dropdownStyle={{width:40,height:90,backgroundColor:'#64a17e',marginLeft:10,marginTop:5,borderWidth:0}}
                             dropdownTextStyle={{backgroundColor:'#64a17e',color:'white'}}
                             onSelect={(idx, value) => this.selectCostUnit(idx, value)}
                             
@@ -153,9 +155,9 @@ export default class Profile extends Component {
                             </View>  
                        </ModalDropdown>   
                        <ModalDropdown options={['0 ~ 10', '10 ~ 100']}
-                        style={{marginTop:10,width:140,backgroundColor:'#64a17e',height:30,borderRadius:15}}
+                        style={{marginTop:10,width:120,backgroundColor:'#64a17e',height:30,borderRadius:15}}
                         textStyle ={{backgroundColor:'transparent',color:'white',textAlign:'center',marginTop:10}}
-                        dropdownStyle={{width:120,height:120,backgroundColor:'#64a17e',marginRight:10,marginTop:5,borderWidth:0}}
+                        dropdownStyle={{width:100,height:120,backgroundColor:'#64a17e',marginRight:10,marginTop:5,borderWidth:0}}
                         dropdownTextStyle={{backgroundColor:'#64a17e',color:'white'}}
                         onSelect={(idx, value) => this.selectMoney(idx, value)}                            
                         >
@@ -183,6 +185,7 @@ export default class Profile extends Component {
                           <Text style={{color:'white'}}> Add on event</Text>
                        </TouchableOpacity>    
                    </View>
+            </KeyboardAwareScrollView>       
             </ImageBackground>
        </SideMenu>     
     );

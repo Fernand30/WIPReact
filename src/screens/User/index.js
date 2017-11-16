@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
   TextInput,
   Picker,
+  ScrollView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import DatePicker from 'react-native-datepicker'
 import ModalDropdown from 'react-native-modal-dropdown';
 import SideMenu from 'react-native-side-menu';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Menu from './Menu';
 
 
@@ -129,9 +131,9 @@ export default class Profile extends Component {
         isOpen={this.state.isOpen}
         onChange={isOpen => this.updateMenuState(isOpen)}
       >
-            <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
-                   <View style={{height:20,}}/>
-
+            <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>            
+                  <View style={{height:20,}}/>
+                  <KeyboardAwareScrollView>
                    <View style={Styles.menuView}>
                       <TouchableOpacity onPress={this.toggle} style={{flex:1,marginTop:20,}}>
                           <Image source = {Images.menu} style = {Styles.menuImage}/>
@@ -141,7 +143,7 @@ export default class Profile extends Component {
                                                :<Image source={Images.account} style={Styles.photoView}/>    }
                       </View>   
                       <View style={{flex:1}}>
-                          <Text style={[Styles.commonText,{marginTop:10,fontSize:26}]}> USER </Text>
+                          <Text style={[Styles.commonText,{marginTop:10,fontSize:24}]}> USER </Text>
                       </View>
                       <View style={{flex:1,justifyContent:'center'}}>    
                           <Image source={Images.key} style={Styles.keyImageView}/>                    
@@ -203,7 +205,8 @@ export default class Profile extends Component {
                       <TouchableOpacity onPress = {this.goReady.bind(this)} style={Styles.readyButton}>
                           <Text style={{color:'white'}}> Ready&gt;</Text>
                       </TouchableOpacity>
-                   </View>       
+                   </View>  
+            </KeyboardAwareScrollView>            
             </ImageBackground>
         </SideMenu>     
     );

@@ -127,13 +127,12 @@ android {
 
 dependencies {
     compile project(':react-native-vector-icons')
-    compile project(':react-native-twitter-signin')
     compile project(':react-native-navigation')
     compile project(':react-native-maps')
     compile project(':react-native-image-picker')
-    compile project(':react-native-google-signin')
     compile project(':react-native-geocoder')
     compile project(':react-native-fetch-blob')
+    compile project(':react-native-twitter-signin')
     compile project(':react-native-facebook-login')
     compile project(':react-native-twitter')
     compile(project(':react-native-firebase')) {
@@ -154,4 +153,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
-apply plugin: 'com.google.gms.google-services'

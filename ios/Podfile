@@ -8,15 +8,4 @@ target 'WIPReact' do
   pod 'Firebase/Firestore'
   pod 'TwitterCore'
   pod 'TwitterKit'
-
-  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
-
-  pod 'react-native-geocoder', :path => '../node_modules/react-native-geocoder'
-
-  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
-
-  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
-
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
 end

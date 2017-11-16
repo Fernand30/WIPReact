@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import GoogleSignIn from 'react-native-google-sign-in';
@@ -49,15 +50,15 @@ export default class Login extends Component {
     fetch('https://api.instagram.com/v1/users/self/?access_token='+token+'')
       .then((response) => response.json())
       .then((responseJson) => {
-        global.user = responseJson.data;
+        global.user = responseJson['data'];
         global.flag = 1;
-        this.dataInsertToFirebase(responseJson.data)
+        // alert(JSON.stringify(global.user))
+        this.dataInsertToFirebase(responseJson['data'])
       })
       .catch((error) => {
         alert(error);
-        return;
       });
-      
+     
   }
 
   goGoogleLogOut(){
@@ -81,18 +82,6 @@ export default class Login extends Component {
     // })
   }
 
-  goTwitter(){
-      global.flag = 3;
-      auth(this.state.tokens, 'rnte://auth')
-              .then(({accessToken, accessTokenSecret}) => {
-                const tokens = {...this.state.tokens, accessToken, accessTokenSecret};
-                alert(tokens)
-              })
-              .catch((err)=>{
-                console.log(err)
-              });
-  }
-
   async goGoogle(){
           await GoogleSignIn.configure({
             clientID: '894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a.apps.googleusercontent.com',
@@ -112,7 +101,7 @@ export default class Login extends Component {
         if(global.flag == 1){
            Actions.registerprofile();
         }else if(global.flag == 2){
-
+           Actions.registerprofile();
         }else if(global.flag == 3){
           
         }else if(global.flag == 4){
@@ -139,7 +128,6 @@ export default class Login extends Component {
                           alert(error)
                       });
                 });
-                
         }
     }
   handleTokens(tokens) {
@@ -155,9 +143,10 @@ export default class Login extends Component {
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
                    <View style={{height:30,}}/>
                    <View style={Styles.logoImageView}>
-                      <Image source = {Images.logo} style = {Styles.logoImage}/>
+                      <Image source = {Images.headerlogo} style = {Styles.logoImage}/>
                    </View>   
-                   <Text style = {Styles.welcomText}>Welcome to{"\n"}where is the people?</Text>
+                   <Text style = {Styles.whereText}>Where is people</Text>
+                   
                    <View style = {Styles.socialButtonView}>
                         <View style = {Styles.flexRow}>
                             <View>
@@ -193,7 +182,7 @@ export default class Login extends Component {
                             </View>   
                         </View>   
                    </View>
-                   <View style = {[Styles.commonView,{marginTop:30}]}>
+                   <View style = {Styles.commonView}>
                          <TouchableOpacity onPress = {this.goLoginWithEmail.bind(this)} style  = {Styles.loginButton}>
                               <Text style = {Styles.buttonText}>Register with email</Text>
                          </TouchableOpacity>     

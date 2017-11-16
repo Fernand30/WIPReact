@@ -1,7 +1,7 @@
 const React = require("react-native");
 const { Dimensions, Platform } = React;
 const commonColor = require("../../theme/variables/commonColor");
-
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 const deviceHeight = Dimensions.get("window").height;
 
 export default {
@@ -103,7 +103,7 @@ export default {
   registryText:{
     textAlign:'center',
     color:'white',
-    fontSize:20,
+    fontSize: responsiveFontSize(3),
     backgroundColor:'transparent'
   },
   searchImage: {

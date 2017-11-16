@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   Picker,
+  ScrollView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
@@ -17,6 +18,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import MapView from 'react-native-maps';
 import CheckBox from 'react-native-modest-checkbox'
 import SideMenu from 'react-native-side-menu';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Menu from '../User/Menu';
 
 import {Colors, Fonts, Images, Metrics, Constants } from '../../theme';
@@ -133,13 +135,14 @@ export default class Profile extends Component {
         onChange={isOpen => this.updateMenuState(isOpen)}
       >
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
+            <KeyboardAwareScrollView>
                    <View style={{height:20,}}/>
                    <View style={Styles.menuView}>
                       <TouchableOpacity onPress={this.toggle.bind(this)} style={{flex:1,marginTop:20,}}>
                           <Image source = {Images.menu} style = {Styles.menuImage}/>
                       </TouchableOpacity> 
-                      <View style={{flex:1,borderBottomColor:'white',borderBottomWidth:1,marginLeft:10,marginRight:10}}>  
-                          <Text style={Styles.registryText}> Add Contact</Text>
+                      <View style={{borderBottomColor:'white',borderBottomWidth:1,paddingLeft:5,paddingRight:5,paddingBottom:5,}}> 
+                          <Text style={Styles.registryText}>Add Contact</Text>
                       </View>    
                       <View style={{flex:1}} />
                    </View>  
@@ -226,6 +229,7 @@ export default class Profile extends Component {
                           <Text style={{color:'white'}}> Ready &gt;</Text>
                       </TouchableOpacity>
                    </View> 
+            </KeyboardAwareScrollView>       
             </ImageBackground>
         </SideMenu>    
     );

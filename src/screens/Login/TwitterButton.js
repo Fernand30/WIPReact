@@ -49,6 +49,7 @@ export default class TwitterButton extends Component {
           const { authToken, authTokenSecret, email, userName} = loginData;
           global.user = loginData;
           global.flag = 3;
+          // alert(JSON.stringify(loginData))
           const tokens = {...this.state.tokens, authToken, authTokenSecret};
           Actions.registerprofile();
         }).catch((error)=>{

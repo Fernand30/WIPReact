@@ -1,9 +1,9 @@
 const React = require("react-native");
 const { Dimensions, Platform } = React;
 const commonColor = require("../../theme/variables/commonColor");
-
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 const deviceHeight = Dimensions.get("window").height;
-
+const imagesize = responsiveHeight(10);
 export default {
   container: {
     flex: 1,
@@ -21,39 +21,49 @@ export default {
 
   logoImageView: {
     marginTop: 30,
-    alignSelf: "center"
+    alignItems: "center"
   },
 
   logoImage: {
-    width:100,
-    height: 175,
-    resizeMode: 'stretch'
+    height: 137, // 50% of screen height
+    width: 100, // 50% of screen width
+    resizeMode: 'cover'
+  },
+
+  whereText :{
+    marginTop:5,
+    textAlign:'center',
+    fontSize: responsiveFontSize(3),
+    color:'white',
+    backgroundColor:'transparent',
   },
 
   welcomText :{
     marginTop:20,
     textAlign:'center',
-    fontSize:16,
+    fontSize: responsiveFontSize(2),
     color:'white',
     backgroundColor:'transparent',
   },
 
   socialButtonView:{
-    paddingTop:40,
-    paddingLeft:90,
-    paddingRight:90,
+    paddingTop:responsiveHeight(5),
+    paddingLeft:responsiveWidth(25),
+    paddingRight:responsiveWidth(25),
+    paddingBottom:responsiveHeight(5),
   },
 
   socialIcon:{
-    width:70,
-    height:70,
+    height: imagesize, 
+    width: imagesize, 
     resizeMode:'cover',
   },
 
   commonText:{
     backgroundColor:'transparent',
     textAlign:'center',
-    color:'white'
+    color:'white',
+    fontSize: responsiveFontSize(5),
   },
 
   buttonText:{
@@ -61,6 +71,7 @@ export default {
     textAlign:'center',
     color:'white',
     fontWeight:'700',
+    fontSize: responsiveFontSize(2),
   },
 
   flexRow:{
@@ -69,8 +80,8 @@ export default {
   },
 
   loginButton: {
-    width:250,
-    height:40,
+    height: responsiveHeight(5), // 50% of screen height
+    width: responsiveWidth(60), // 50% of screen width
     borderRadius:20,
     backgroundColor:'#03cca1',
     alignItems:'center',
@@ -80,7 +91,7 @@ export default {
   linkText:{
     textAlign:'center',
     color:'white',
-    fontSize:14,
+    fontSize: responsiveFontSize(2),
     backgroundColor:'transparent',
     marginTop:20,
     textDecorationLine:'underline'

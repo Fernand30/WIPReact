@@ -1,7 +1,7 @@
 const React = require("react-native");
 const { Dimensions, Platform } = React;
 const commonColor = require("../../theme/variables/commonColor");
-
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 const deviceHeight = Dimensions.get("window").height;
 
 export default {
@@ -20,8 +20,8 @@ export default {
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
-    paddingLeft:20,
-    paddingRight:20,
+    paddingLeft:10,
+    paddingRight:10,
   },
 
   commonView:{
@@ -97,11 +97,11 @@ export default {
   registryText:{
     textAlign:'center',
     color:'white',
-    fontSize:20,
+    fontSize: responsiveFontSize(3),
     backgroundColor:'transparent'
   },
 
-  searchWipButton: {marginTop:10,marginRight:10,width:180,height:30,borderRadius:15,backgroundColor:'green',alignItems:'center',justifyContent:'center'},
+  searchWipButton: {marginTop:10,marginRight:10,flex:1,height:30,borderRadius:15,backgroundColor:'green',alignItems:'center',justifyContent:'center'},
   onEventButton: {marginRight:10,width:140,height:40,borderRadius:15,backgroundColor:'green',alignItems:'center',justifyContent:'center'},
   photoView: {width:60,height:60,borderRadius:30,resizeMode:'cover',marginLeft:30},
 

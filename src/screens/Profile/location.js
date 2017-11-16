@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
   TextInput,
   Picker,
+  ListView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import SideMenu from 'react-native-side-menu';
 import Menu from '../User/Menu';
 import Geocoder from 'react-native-geocoder';
+import GooglePlaceAutocomplete from 'react-native-google-place-autocomplete';
 
 import {Colors, Fonts, Images, Metrics, Constants } from '../../theme';
 import Styles from './styles.js'
@@ -29,7 +31,7 @@ const LATITUDE = 10.5000023;
 const LONGITUDE = -66.7951947;
 const LATITUDE_DELTA = 0.005;
 const LONGITUDE_DELTA =LATITUDE_DELTA * ASPECT_RATIO;
-
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 export default class Profile extends Component {
 
   constructor(props){
@@ -55,6 +57,7 @@ export default class Profile extends Component {
       longitude: '',
       latitude: '',
       fullAddress: this.props.that.state.location,
+      dataSource: ds.cloneWithRows(['row1','row2']),
     });
   }
 
@@ -62,10 +65,13 @@ export default class Profile extends Component {
     
   }
 
-   goBack(){
-      this.props.that.setState({location: this.state.fullAddress})
-      Actions.pop();
-   } 
+  nothingBack(){
+   Actions.pop();  
+  }
+ goBack(item){
+    this.props.that.setState({location: item})
+    Actions.pop();
+ } 
 
   toggle() {
     this.setState({
@@ -74,6 +80,7 @@ export default class Profile extends Component {
   }
 
 _onRegionChangeComplete(region) {
+    
     var NY = {
       lat: region.latitude,
       lng: region.longitude
@@ -81,10 +88,13 @@ _onRegionChangeComplete(region) {
     Geocoder.geocodePosition(NY).then(res => {
       this.setState({
         fullAddress: res[0]['formattedAddress'],
+        dataSource: ds.cloneWithRows([res[0]['formattedAddress']]),
       })      
     })
     .catch(err => console.log(err)) 
+    
   }
+
 locationChange(){
   var address  = this.state.fullAddress;
   if(address == '') address = this.props.that.state.location;
@@ -92,15 +102,16 @@ locationChange(){
   Geocoder.geocodeAddress(address).then(res => {
       LATITUDE = res[0]['position']['lat']
       LONGITUDE = res[0]['position']['lng']
-      this.setState({
-        region:{
+      
+       const region = {
           latitude: LATITUDE,
           longitude: LONGITUDE,
           latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        },
-      })
-    }).catch(err => console.log(err))
+          longitudeDelta: LONGITUDE_DELTA,    
+      }
+      this._onRegionChangeComplete(region)
+    }).catch(err => alert(err))
+    
 }
 
 updateMenuState(isOpen) {
@@ -121,7 +132,7 @@ onMenuItemSelected = item =>
 
   
   render() {
-    that = this;
+    
     const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
     return (
       <SideMenu
@@ -130,44 +141,18 @@ onMenuItemSelected = item =>
         onChange={isOpen => this.updateMenuState(isOpen)}
       >
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
-                   <View style={{height:20,}}/>
-                   <View style={Styles.menuView}>
-                      <TouchableOpacity onPress={this.toggle.bind(this)} style={{width:50,marginTop:20,}}>
-                          <Image source = {Images.menu} style = {Styles.menuImage}/>
-                      </TouchableOpacity> 
-                      <View style={{width:250,borderBottomColor:'white',borderBottomWidth:1,}}>  
-                          <Text style={Styles.registryText}> Location of your contact</Text>
-                      </View>    
-                      <View style={{width:50}} />
-                   </View>   
-                   <View style={{marginLeft:20,marginTop:20,marginBottom:20}}>        
-                      <TextInput  onSubmitEditing={this.locationChange.bind(this)} value={this.state.fullAddress} onChangeText={(text) => this.changeAddress(text)} style={{width:250,height:30,backgroundColor:'white',paddingLeft:10,}}>
-
-                      </TextInput>
-                   </View>   
+              <View style={{height:40,}}/>
+                  <View style={{flexDirection:'row'}}>
+                   <GooglePlaceAutocomplete
+                      style={{flex:1,marginLeft:10,marginRight:10}}
+                      googleAPIKey="AIzaSyBDlXDjhHSBgI6etr234bO23X6Dc1QYJ7I"
+                      onResult={(result) => this.goBack(result.formatted_address)}
+                      placeholder="Enter location..." />
                         
-                   <View style={{alignItems:'center'}}>
-                      <MapView
-                          style={{
-                            width:width-40,
-                            height:height - 300,
-                            backgroundColor:'#ff0000',
-                          }}
-                          region={this.state.region}
-                          showsUserLocation={true}
-                          followUserLocation ={true}
-                          scrollEnabled ={true}
-                          onRegionChangeComplete={this._onRegionChangeComplete.bind(this)}      
-                        >
-                          <Text style={{backgroundColor:'transparent',marginTop:300,marginLeft:200,fontSize:20}}> WIP</Text>  
-
-                        </MapView>
-                   </View> 
-                   <View>
-                       <TouchableOpacity onPress={this.goBack.bind(this)} style={Styles.backButton} >
-                          <Text style={{color:'white'}}> &lt;</Text>
-                       </TouchableOpacity>    
-                   </View>
+                   <TouchableOpacity onPress={this.nothingBack.bind(this)} style={{position:'absolute',top:10,right:20,alignItems:'center',justifyContent:'center'}}>
+                      <Text style={{color:'black',fontSize:18}}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>    
             </ImageBackground>
        </SideMenu>     
     );
