@@ -30,9 +30,9 @@ import Styles from './styles.js'
 
 global.fullAddress = 'Terrazas del avila, Caracas, Venezuela';
 const config = {
-  apiKey: "AIzaSyB1iiLylcQdPCxsmFAX9yTzROJrMpBVwa4",
-  authDomain: "wipreactnative",
-  storageBucket: "wipreactnative.appspot.com",
+  apiKey: "AIzaSyDG8AmendOwWKA_SW3ZA-69dsR-zr_WjHc",
+  authDomain: "where-is-people",
+  storageBucket: "where-is-people.appspot.com",
 }
 firebaseImage.initializeApp(config)
 const storage = firebaseImage.storage()
@@ -167,6 +167,7 @@ export default class Profile extends Component {
                           'password'
                       );
                       global.fireToken = crd['token'];
+                      this.state.token = global.fireToken;
                       this.callApi()
                 }).catch(function(error){
                       firebase.auth().signInWithEmailAndPassword(this.state.email, 'password').then((data)=>{
@@ -176,6 +177,7 @@ export default class Profile extends Component {
                               'password'
                           );
                           global.fireToken = crd['token'];
+                          this.state.token = global.fireToken;
                           this.callApi()
                       }).catch(function(error){
                           alert(error)
@@ -187,7 +189,6 @@ export default class Profile extends Component {
    }
 
    callApi(){
-
     var id = ''
     var jsonPostData = JSON.stringify({
                  field_55: this.state.setPublic,
@@ -223,7 +224,7 @@ export default class Profile extends Component {
                       this.ref = firebase.firestore().collection(global.uid).doc('doc').set(
                           {
                             photoURL: this.state.photoURL,
-                            givenName: this.state.givenName,
+                            givenName: this.state.givenName,  
                             familyName: this.state.familyName,
                             birthday: this.state.birthday,
                             gender: this.state.gender,
@@ -235,7 +236,12 @@ export default class Profile extends Component {
                             id: id,
                           }
                       );  
-                      Actions.events();       
+                      global.Userusername = this.state.givenName;
+                      global.Userphotourl = this.state.photoURL;
+                      global.Userbirthday = this.state.birthday;
+                      global.Useremail = this.state.email;
+                      
+                      Actions.events();  
                     }
                }).catch(function(err) {
                 alert(err)

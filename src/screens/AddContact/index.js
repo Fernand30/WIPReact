@@ -135,8 +135,8 @@ export default class Profile extends Component {
         onChange={isOpen => this.updateMenuState(isOpen)}
       >
             <ImageBackground source = {Images.bg} style = {Styles.backgroundImage}>
-            <KeyboardAwareScrollView>
                    <View style={{height:20,}}/>
+                <KeyboardAwareScrollView>
                    <View style={Styles.menuView}>
                       <TouchableOpacity onPress={this.toggle.bind(this)} style={{flex:1,marginTop:20,}}>
                           <Image source = {Images.menu} style = {Styles.menuImage}/>

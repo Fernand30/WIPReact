@@ -30,64 +30,10 @@ export default class Profile extends Component {
     super(props);
     this.toggle = this.toggle.bind(this);
 
-    if(global.flag == 1){
       this.state = ({
-        photoURL: global.user.profile_picture,
-        givenName: global.user.full_name,
-        familyName: '',
-        birthday: global.user.birthday,
-        gender: 'Male',
-        phone: '',
-        email: global.user.email,
-        passwd: '',
-        setPublic: true,
         isOpen: false,
         selectedItem: '',
       });
-    }else if(global.flag == 2){
-      this.state = ({ 
-        setPublic: true,
-        isOpen: false,
-        selectedItem: '',
-      });
-    }else if(global.flag == 3){
-      this.state = ({
-        photoURL: '',
-        givenName: global.user.userName,       
-        email: global.user.email,        
-        setPublic: true,
-        isOpen: false,
-        selectedItem: '',
-      });
-    }else if(global.flag == 4){
-      this.state = ({
-        photoURL: global.user.photo,
-        givenName: global.user.givenName,
-        familyName: global.user.familyName,
-        birthday: global.user.birthday,
-        gender: 'Male',
-        phone: '',
-        email: global.user.email,
-        passwd: '',
-        setPublic: true,
-        isOpen: false,
-        selectedItem: '',
-      });
-    }else if(global.flag == 5){
-      this.state = ({
-        photoURL: '',
-        givenName: '',
-        familyName: '',
-        birthday: '',
-        gender: '',
-        phone: '',
-        email: '',
-        passwd: '',
-        setPublic: true,
-        isOpen: false,
-        selectedItem: '',
-      });
-    }
   }
 
   componentDidMount() {
@@ -139,7 +85,7 @@ export default class Profile extends Component {
                           <Image source = {Images.menu} style = {Styles.menuImage}/>
                       </TouchableOpacity> 
                       <View style={{flex:1}}>
-                          {(this.state.photoURL!='')?<Image source={{uri:this.state.photoURL}} style={Styles.photoView}/>
+                          {(global.Userphotourl!='')?<Image source={{uri:global.Userphotourl}} style={Styles.photoView}/>
                                                :<Image source={Images.account} style={Styles.photoView}/>    }
                       </View>   
                       <View style={{flex:1}}>
