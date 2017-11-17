@@ -33,7 +33,7 @@ export default class App extends Component<{}> {
 
   async googleSignin(){
       await GoogleSignIn.configure({
-            clientID: '894250356144-pvaqt4t8tt8jiu81ab9ahurh86qvbo8a.apps.googleusercontent.com',
+            clientID: '418975558435-il473pkdtp0a8vcoa1eem2sbgtu7384l.apps.googleusercontent.com',
             scopes: ['openid', 'email', 'profile'],
             shouldFetchBasicProfile: true,
           });

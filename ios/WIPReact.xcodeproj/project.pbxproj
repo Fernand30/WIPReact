@@ -412,7 +412,6 @@
 		9A10DE1F1FB396FD00F086E4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = FacebookSDK/Bolts.framework; sourceTree = "<group>"; };
 		9A151FA21FBC444000952AD5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9A151FA51FBC446400952AD5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = WIPReact/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		9A151FBB1FBC7AC700952AD5 /* WIPReactTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WIPReactTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A200B781FB383DD00E3DCC8 /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
 		9A24AA161FB292380064AAEE /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		9A24AA1D1FB2A3430064AAEE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -435,6 +434,7 @@
 		AC7561C41F29D6A3009FCD09 /* RNGoogleSignInEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNGoogleSignInEvents.swift; sourceTree = "<group>"; };
 		AC7561C51F29D6A3009FCD09 /* RNGoogleSignInEventsBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNGoogleSignInEventsBridge.m; sourceTree = "<group>"; };
 		B033D70D1EC14294BACF7B98 /* GothamBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GothamBold.otf; path = ../src/Assets/Fonts/GothamBold.otf; sourceTree = "<group>"; };
+		B412EA0C1FBE72000094A523 /* WIPReactTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WIPReactTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF71B4E5C2483E718AC4D192 /* Pods-WIPReact.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WIPReact.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WIPReact/Pods-WIPReact.debug.xcconfig"; sourceTree = "<group>"; };
 		C3B37D4D9F9E4E7EBE4D1453 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		CA1C281A5C8E48CE8F11D507 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -729,7 +729,7 @@
 				1CD1C0421FB4E90900CA99CB /* WIPReact.app */,
 				A7578F856BEA400C98F44FB9 /* Resources */,
 				1C3D39431FB4F301009C809E /* Recovered References */,
-				9A151FBB1FBC7AC700952AD5 /* WIPReactTests.xctest */,
+				B412EA0C1FBE72000094A523 /* WIPReactTests.xctest */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -839,7 +839,7 @@
 			);
 			name = WIPReactTests;
 			productName = ExampleAppTests;
-			productReference = 9A151FBB1FBC7AC700952AD5 /* WIPReactTests.xctest */;
+			productReference = B412EA0C1FBE72000094A523 /* WIPReactTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		13B07F861A680F5B00A75B9A /* WIPReact */ = {
@@ -878,7 +878,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 4URJ54RTED;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1340,7 +1341,7 @@
 				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
 				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterShareExtensionUIResources.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/gRPC/gRPCCertificates.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/gRPC/gRPCCertificates.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -1491,10 +1492,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4URJ54RTED;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TwitterKitManual",
@@ -1545,9 +1546,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4URJ54RTED;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TwitterKitManual",
