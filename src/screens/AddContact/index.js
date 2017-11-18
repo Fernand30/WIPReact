@@ -126,6 +126,9 @@ export default class Profile extends Component {
     });
 
   render() {
+    if(this.state.selectedItem=='Profile'){
+      Actions.registerprofile();
+    }
     that = this;
     const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
     return (
