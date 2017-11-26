@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/justin/projects/goldenowl/react-native-twitter-signin/Example/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4/tw__ic_logo_default.png",
+        "source": "/Users/justin/.android/build-cache/9593828c92eaa3d934c342b5ab1df4929308afb3/output/res/drawable-mdpi-v4/tw__ic_logo_default.png"
+    },
+    {
+        "merged": "/Users/justin/projects/goldenowl/react-native-twitter-signin/Example/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4/tw__composer_logo_white.png",
+        "source": "/Users/justin/.android/build-cache/c920d005a227f61729b0736f9e1973bd7711c9b0/output/res/drawable-mdpi-v4/tw__composer_logo_white.png"
+    },
+    {
+        "merged": "/Users/justin/projects/goldenowl/react-native-twitter-signin/Example/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4/tw__composer_logo_blue.png",
+        "source": "/Users/justin/.android/build-cache/c920d005a227f61729b0736f9e1973bd7711c9b0/output/res/drawable-mdpi-v4/tw__composer_logo_blue.png"
+    },
+    {
+        "merged": "/Users/justin/projects/goldenowl/react-native-twitter-signin/Example/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4/tw__composer_close.png",
+        "source": "/Users/justin/.android/build-cache/c920d005a227f61729b0736f9e1973bd7711c9b0/output/res/drawable-mdpi-v4/tw__composer_close.png"
+    }
+]
